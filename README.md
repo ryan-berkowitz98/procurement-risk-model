@@ -25,7 +25,7 @@ The Procurement Risk Model provides a set of tools for analyzing public procurem
 - **Red-Flag Modules**  
   The model evaluates several common risk signals in procurement data:
   - **Non-competitive tenders** – flags contracts awarded without open competition.  
-  - **Spending concentration** – highlights when a single supplier consistently wins a large share of awards.  
+  - **Spending concentration** – highlights when a single supplier consistently wins a large share of awards from a single buyer.  
   - **Short bid windows** – identifies contracts where the time to submit bids was unusually short.  
   - **Contract splitting** – detects when larger procurements may have been divided into smaller lots to bypass thresholds or oversight.  
 
