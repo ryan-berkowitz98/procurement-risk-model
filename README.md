@@ -70,12 +70,12 @@ This project is designed to support both **non-technical** and **technical** aud
    ```
 
 3. **Prepare the input data**
-a. **Choose a country.** See the list of supported countries in the [data brief (p.4)](https://www.govtransparency.eu/wp-content/uploads/2024/04/Fazekas-et-al_Global-PP-data_published_2024.pdf).
-b. **Download the country-level CSV.** Use the [Global Contract-Level Public Procurement Dataset](https://www.govtransparency.eu/global-contract-level-public-procurement-dataset/) (maintained by the **Government Transparency Institute**) or go directly to the [dataset download index](https://input.mendeley.com/inputsets/fwzpywbhgw/3).
-c. **Place the file in `input/`.** Name it using the convention:
-
-   `{country_code}_DIB_[YYYY].csv`  
-   Example: `MX_DIB_2023.csv`
+  - **Choose a country.** See the list of supported countries in the [data brief (p.4)](https://www.govtransparency.eu/wp-content/uploads/2024/04/Fazekas-et-al_Global-PP-data_published_2024.pdf).
+  - **Download the country-level CSV.** Use the [Global Contract-Level Public Procurement Dataset](https://www.govtransparency.eu/global-contract-level-public-procurement-dataset/) (maintained by the **Government Transparency Institute**) or go directly to the [dataset download index](https://input.mendeley.com/inputsets/fwzpywbhgw/3).
+  - **Place the file in `input/`.** Name it using the convention:
+  
+     `{country_code}_DIB_[YYYY].csv`  
+     Example: `MX_DIB_2023.csv`
 
 
 
