@@ -77,6 +77,19 @@ This project is designed to support both **non-technical** and **technical** aud
      `{country_code}_DIB_[YYYY].csv`  
      Example: `MX_DIB_2023.csv`
 
+4. **Run the pipeline**
+- Each script in the `src/` directory is modular and can be executed from the command line or within a Python environment.
+- A typical run might look like:
+  ```bash
+  python src/01_input.py
+  python src/02_clean_transform.py
+  python src/03_flag_non_competitive.py
+  ...
+  python src/99_export_risk_report.py
+- Final outputs (including Excel summaries and flagged risk tables) will be written to the '/output' directory.
+  
+
+
 
 
 
