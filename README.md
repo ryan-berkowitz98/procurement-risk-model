@@ -70,7 +70,7 @@ This project is designed to support both **non-technical** and **technical** aud
    ```
 
 3. **Prepare the input data** 
-  - The raw CSV file is not included in this repo due to size.
+  - User can choose from over 40 countries listed out on page 4 of the [data brief](https://www.govtransparency.eu/wp-content/uploads/2024/04/Fazekas-et-al_Global-PP-data_published_2024.pdf) written by Mihály Fazekas, Bence Tóthb , Aly Abdouc , and Ahmed Al-Shaibani.
   - Download country-level datasets from the [Global Contract-Level Public Procurement Dataset](https://www.govtransparency.eu/global-contract-level-public-procurement-dataset/) maintained by the [**Government Transparency Institute**](https://www.govtransparency.eu/).
   - Country-level CSVs are available here: **Dataset Download Link**.
   - Place the file into the `/input` directory in this repo, following the naming convention:
