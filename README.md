@@ -62,31 +62,31 @@ This project is designed to support both **non-technical** and **technical** aud
    cd procurement-risk-model
 
 2. **Set up a Python environment**  
- - Python 3.9+ is recommended.  
- - Install dependencies:  
-
-   ```bash
-   pip install -r requirements.txt
-   ```
+   - Python 3.9+ is recommended.  
+   - Install dependencies:  
+  
+     ```bash
+     pip install -r requirements.txt
+     ```
 
 3. **Prepare the input data**
-  - **Choose a country.** See the list of supported countries in the [data brief (p.4)](https://www.govtransparency.eu/wp-content/uploads/2024/04/Fazekas-et-al_Global-PP-data_published_2024.pdf).
-  - **Download the country-level CSV.** Use the [Global Contract-Level Public Procurement Dataset](https://www.govtransparency.eu/global-contract-level-public-procurement-dataset/) (maintained by the **Government Transparency Institute**) or go directly to the [dataset download index](https://input.mendeley.com/inputsets/fwzpywbhgw/3).
-  - **Place the file in `input/`.** Name it using the convention:
-  
-     `{country_code}_DIB_[YYYY].csv`  
-     Example: `MX_DIB_2023.csv`
+    - **Choose a country.** See the list of supported countries in the [data brief (p.4)](https://www.govtransparency.eu/wp-content/uploads/2024/04/Fazekas-et-al_Global-PP-data_published_2024.pdf).
+    - **Download the country-level CSV.** Use the [Global Contract-Level Public Procurement Dataset](https://www.govtransparency.eu/global-contract-level-public-procurement-dataset/) (maintained by the **Government Transparency Institute**) or go directly to the [dataset download index](https://input.mendeley.com/inputsets/fwzpywbhgw/3).
+    - **Place the file in `input/`.** Name it using the convention:
+    
+       `{country_code}_DIB_[YYYY].csv`  
+       Example: `MX_DIB_2023.csv`
 
 4. **Run the pipeline**
-- Each script in the `src/` directory is modular and can be executed from the command line or within a Python environment.
-- A typical run might look like:
-  ```bash
-  python src/01_input.py
-  python src/02_clean_transform.py
-  python src/03_flag_non_competitive.py
-  ...
-  python src/99_export_risk_report.py
-- Final outputs (including Excel summaries and flagged risk tables) will be written to the '/output' directory.
+  - Each script in the `src/` directory is modular and can be executed from the command line or within a Python environment.
+  - A typical run might look like:
+    ```bash
+    python src/01_input.py
+    python src/02_clean_transform.py
+    python src/03_flag_non_competitive.py
+    ...
+    python src/99_export_risk_report.py
+  - Final outputs (including Excel summaries and flagged risk tables) will be written to the '/output' directory.
   
 
 
