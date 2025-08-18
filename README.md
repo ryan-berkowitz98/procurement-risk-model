@@ -38,3 +38,21 @@ The Procurement Risk Model provides a set of tools for analyzing public procurem
 - **Documentation & Transparency**  
   Clear output tables and summaries make the results accessible for both technical users (who can extend the code) and non-technical users (who can use the outputs to guide investigations).
 
+
+## ⚙️ Installation & Setup
+
+This project is designed to support both **non-technical** and **technical** audiences. Choose the path that fits your role and needs:
+
+---
+
+### 🧑‍💼 For Non-Technical Users
+
+- You can start exploring the results immediately by downloading the **`MX_procurement_risk_report.xlsx`** file from the `output/` folder in this repository.  
+  This file contains a risk report already generated for **Mexico’s procurement data**.  
+- We’ll walk through the meaning of each red flag indicator later in this README.  
+- If you’d like to see results for a **different country**, you have two options:  
+  1. **Contact me directly** and I can run the model for you.  
+  2. Work with a **data scientist or technical colleague** who can run the model internally using the instructions below.
+
+---
+
