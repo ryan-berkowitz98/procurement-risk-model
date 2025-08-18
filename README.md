@@ -70,13 +70,13 @@ This project is designed to support both **non-technical** and **technical** aud
      ```
 
 3. **Prepare the input data** 
-  - The raw CSV file is not included in this repo due to size.
-  - Download data from the **Global Contract-Level Public Procurement Dataset** maintained by the Government Transparency Institute.
-  - Country-level CSVs are available here: **Dataset Download Link**.
-  - Place the file into the `/input` directory in this repo, following the naming convention:
-  
-    `{country_code}_DIB_[YYYY].csv`  
-    Example: `MX_DIB_2023.csv`
+    - The raw CSV file is not included in this repo due to size.
+    - Download data from the **Global Contract-Level Public Procurement Dataset** maintained by the Government Transparency Institute.
+    - Country-level CSVs are available here: **Dataset Download Link**.
+    - Place the file into the `/input` directory in this repo, following the naming convention:
+    
+      `{country_code}_DIB_[YYYY].csv`  
+      Example: `MX_DIB_2023.csv`
 
 
 
