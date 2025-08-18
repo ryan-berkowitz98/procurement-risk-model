@@ -4,7 +4,7 @@
 
 The **Procurement Risk Model** is both a research tool and a documented framework for identifying high-risk contracts in public procurement data. The goal of this project is to build something with tangible impact — a system that helps make the world more just and fair by holding businesses and governments accountable to transparent and competitive procurement practices. Fair competition benefits everyone, and this project is designed to highlight when the rules aren’t being followed.
 
-At its core, the repository provides a reproducible workflow for analyzing procurement data to flag potential red flags such as non-competitive tenders, suspicious spending concentration, or unusually short bidding windows. While the current implementation is focused on **Mexico’s procurement data**, the model is designed to be extensible. The raw data source (Government Transparency Institute) provides CSV exports for over **40 countries**, meaning users can easily plug in other datasets and generate comparable risk analyses.
+At its core, the repository provides a reproducible workflow for analyzing procurement data to flag potential red flags such as non-competitive tenders, suspicious spending concentration, or unusually short bidding windows. While the current implementation is focused on **Mexico’s procurement data**, the model is designed to be extensible. The raw data source ([Government Transparency Institute](https://www.govtransparency.eu/)) provides CSV exports for over **40 countries**, meaning users can easily plug in other datasets and generate comparable risk analyses.
 
 This project is intended to serve two audiences:
 - **Technical users** who want to extend the codebase, adapt it for other countries, or build more advanced models (e.g., with machine learning and AI tools).  
@@ -71,7 +71,7 @@ This project is designed to support both **non-technical** and **technical** aud
 
 3. **Prepare the input data** 
   - The raw CSV file is not included in this repo due to size.
-  - Download country-level datasets from the [**Global Contract-Level Public Procurement Dataset**](https://www.govtransparency.eu/global-contract-level-public-procurement-dataset/) maintained by the [Government Transparency Institute](https://www.govtransparency.eu/).
+  - Download country-level datasets from the [Global Contract-Level Public Procurement Dataset](https://www.govtransparency.eu/global-contract-level-public-procurement-dataset/) maintained by the [**Government Transparency Institute**](https://www.govtransparency.eu/).
   - Country-level CSVs are available here: **Dataset Download Link**.
   - Place the file into the `/input` directory in this repo, following the naming convention:
   
