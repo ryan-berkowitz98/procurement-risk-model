@@ -69,14 +69,14 @@ This project is designed to support both **non-technical** and **technical** aud
    pip install -r requirements.txt
    ```
 
-3. **Prepare the input data** 
-  - User can choose from over 40 countries listed out on page 4 of the [data brief](https://www.govtransparency.eu/wp-content/uploads/2024/04/Fazekas-et-al_Global-PP-data_published_2024.pdf) written by Mihály Fazekas, Bence Tóthb , Aly Abdouc , and Ahmed Al-Shaibani.
-  - Download country-level datasets from the [Global Contract-Level Public Procurement Dataset](https://www.govtransparency.eu/global-contract-level-public-procurement-dataset/) maintained by the [**Government Transparency Institute**](https://www.govtransparency.eu/).
-  - Country-level CSVs are available here: **Dataset Download Link**.
-  - Place the file into the `/input` directory in this repo, following the naming convention:
-  
-    `{country_code}_DIB_[YYYY].csv`  
-    Example: `MX_DIB_2023.csv`
+3. **Prepare the input data**
+a. **Choose a country.** See the list of supported countries in the [data brief (p.4)](https://www.govtransparency.eu/wp-content/uploads/2024/04/Fazekas-et-al_Global-PP-data_published_2024.pdf).
+b. **Download the country-level CSV.** Use the [Global Contract-Level Public Procurement Dataset](https://www.govtransparency.eu/global-contract-level-public-procurement-dataset/) (maintained by the **Government Transparency Institute**) or go directly to the [dataset download index](https://input.mendeley.com/inputsets/fwzpywbhgw/3).
+c. **Place the file in `input/`.** Name it using the convention:
+
+   `{country_code}_DIB_[YYYY].csv`  
+   Example: `MX_DIB_2023.csv`
+
 
 
 
