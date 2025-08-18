@@ -54,3 +54,18 @@ This project is designed to support both **non-technical** and **technical** aud
 
 ---
 
+### 👩‍💻 For Technical Users
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/ryan-berkowitz98/procurement-risk-model.git
+   cd procurement-risk-model
+
+2. **Set up a Python environment**  
+   - Python 3.9+ is recommended.  
+   - Install dependencies:  
+
+     ```bash
+     pip install -r requirements.txt
+     ```
+
