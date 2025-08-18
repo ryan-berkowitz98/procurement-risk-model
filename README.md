@@ -43,8 +43,6 @@ The Procurement Risk Model provides a set of tools for analyzing public procurem
 
 This project is designed to support both **non-technical** and **technical** audiences. Choose the path that fits your role and needs:
 
----
-
 ### 🧑‍💼 For Non-Technical Users
 
 - You can start exploring the results immediately by downloading the **`MX_procurement_risk_report.xlsx`** file from the `output/` folder in this repository.  
