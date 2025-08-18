@@ -89,6 +89,49 @@ This project is designed to support both **non-technical** and **technical** aud
   - Final outputs (including Excel summaries and flagged risk tables) will be written to the '/output' directory.
   
 
+## 📊 Outputs
+
+Running the pipeline generates a set of artifacts in the `output/` directory. Most users will start with the Excel report:
+
+### Primary report
+- **`output/MX_procurement_risk_report.xlsx`**
+  - A consolidated workbook with high-level summaries and red-flag tables.
+
+#### Workbook tabs
+- **Bidder Risk Summary**  
+  Aggregated risk score per bidder based on multiple indicators.  
+  _Key columns:_ `bidder_id`, `bidder_name`, `risk_score`, `flags_triggered`, `total_awards`, `total_award_value_usd`.
+
+- **Buyer Summary**  
+  Contracting authority overview: spend, award counts, and concentration.  
+  _Key columns:_ `buyer_id`, `buyer_name`, `award_count`, `total_spend_usd`, `top_bidder_share`.
+
+- **Non-Comp Flag**  
+  Awards made with limited or no competition.  
+  _Key columns:_ `tender_id`, `buyer_name`, `bidder_name`, `procedure_type`, `award_value_usd`, `award_date`, `non_competitive_flag`.
+
+- **Spending Concentration Flag**  
+  Buyer–supplier pairs where one supplier captures an outsized share.  
+  _Key columns:_ `buyer_name`, `bidder_name`, `share_of_buyer_spend`, `award_count`, `total_award_value_usd`.
+
+- **Short Bid Windows Flag**  
+  Tenders with unusually short time between publication and deadline.  
+  _Key columns:_ `tender_id`, `buyer_name`, `bid_window_days`, `award_value_usd`, `award_date`, `short_window_flag`.
+
+- **Contract Splitting Flag**  
+  Potential splitting of procurements across similar items/time/windows to avoid thresholds.  
+  _Key columns:_ `cluster_id`, `buyer_name`, `suspected_splits_count`, `sum_award_value_usd`, `time_window_days`.
+
+> Note: `output/ancillary/` contains intermediate artifacts and is ignored by Git.
+
+---
+
+### How to read the results (quick guide)
+- **Risk scores**: Higher scores = more concerning pattern combinations across flags.  
+- **Flags are directional, not dispositive**: Use them as starting points for human review/investigation.  
+- **Cross-reference**: Prioritize entities appearing in multiple tabs (e.g., a bidder flagged for both non-competitive awards and buyer-spend concentration).
+
+---
 
 
 
