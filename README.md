@@ -340,11 +340,6 @@ For each supplier:
 
 
 
-## 🧪 CLI Usage (per module)
-
-Most scripts accept `--country XX`; otherwise they default to `DEFAULT_COUNTRY`.
-
-
 ## 🗺️ Roadmap
 
 - Multi-country presets and config templates
