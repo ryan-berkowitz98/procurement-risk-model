@@ -1,8 +1,9 @@
-# procurement-risk-model
+# Global Procurement Risk Model
+# By: ryan-berkowitz98
 
 ## 📖 Project Overview
 
-The **Procurement Risk Model** is both a research tool and a documented framework for identifying high-risk contracts in public procurement data. The goal of this project is to build something with tangible impact — a system that helps make the world more just and fair by holding businesses and governments accountable to transparent and competitive procurement practices. Fair competition benefits everyone, and this project is designed to highlight when the rules aren’t being followed.
+The **Global Procurement Risk Model** is both a research tool and a documented framework for identifying high-risk contracts in public procurement data. The goal of this project is to build something with tangible impact — a system that helps make the world more just and fair by holding businesses and governments accountable to transparent and competitive procurement practices. Fair competition benefits everyone, and this project is designed to highlight when the rules aren’t being followed.
 
 At its core, the repository provides a reproducible workflow for analyzing procurement data to flag potential red flags such as non-competitive tenders, suspicious spending concentration, or unusually short bidding windows. While the current implementation is focused on **Mexico’s procurement data**, the model is designed to be extensible. The raw data source ([Government Transparency Institute](https://www.govtransparency.eu/)) provides CSV exports for over **40 countries**, meaning users can easily plug in other datasets and generate comparable risk analyses.
 
@@ -337,6 +338,53 @@ For each supplier:
 - **Title similarity** uses a simple string matcher; it can miss synonyms or flag near-matches—manual review recommended.
 - Clustering is **O(n²) per supplier**; for very large datasets, consider blocking (by CPV/category, buyer, or month) or approximate similarity.
 - Imputed dates (when award date is missing) can make clusters conservative; always validate in source documents.
+
+
+
+## 🧪 CLI Usage (per module)
+
+Most scripts accept `--country XX`; otherwise they default to `DEFAULT_COUNTRY`.
+
+```bash
+# Non-competitive tenders
+python src/03_flag_non_competitive_tenders.py --country MX
+
+# Spending concentration (buyer → supplier shares; open tenders only)
+python src/04_flag_spending_concentration.py --country MX
+
+# Short bidding windows (dynamic 10th percentile threshold; open tenders only)
+python src/05_flag_short_bidding_window.py --country MX
+
+# Contract splitting (tunable args shown below)
+# Defaults: approval_threshold=10_000_000, time_window_days=7, similarity_threshold=0.5
+# (If you want to change these, edit the call in __main__ or wrap with your own runner.)
+python src/06_analyze_contract_splitting.py --country MX
+
+# Export consolidated Excel report
+python src/99_export_risk_report.py
+
+
+## 🗺️ Roadmap
+
+- Multi-country presets and config templates
+- Entity resolution across aliases (buyers & suppliers)
+- Richer contract-splitting detection (blocking by category/CPV; approximate text embeddings)
+- ML-assisted risk scoring and explainability
+- Optional lightweight UI for browsing flags and drill-downs
+
+
+
+## 📄 License & Attribution
+
+- Please attribute **Global Procurement Risk Model** and the author when sharing derivatives.
+
+
+## 📬 Contact
+
+Questions or want a run for another country?  
+**Ryan Berkowitz** — open an issue in this repo or reach out directly.
+
+
 
 
 
