@@ -358,7 +358,7 @@ For each supplier:
 ## 📬 Contact
 
 Questions or want a run for another country?  
-- Open an issue in this repo or reach out directly.
+- Open an issue in this repo or reach out directly on [LinkedIn](https://www.linkedin.com/in/ryan-berkowitz/).
 
 
 
