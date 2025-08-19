@@ -1,4 +1,4 @@
-# Global Procurement Risk Model
+# Global Procurement Risk Model  
 # By: ryan-berkowitz98
 
 ## 📖 Project Overview
@@ -344,24 +344,6 @@ For each supplier:
 ## 🧪 CLI Usage (per module)
 
 Most scripts accept `--country XX`; otherwise they default to `DEFAULT_COUNTRY`.
-
-```bash
-# Non-competitive tenders
-python src/03_flag_non_competitive_tenders.py --country MX
-
-# Spending concentration (buyer → supplier shares; open tenders only)
-python src/04_flag_spending_concentration.py --country MX
-
-# Short bidding windows (dynamic 10th percentile threshold; open tenders only)
-python src/05_flag_short_bidding_window.py --country MX
-
-# Contract splitting (tunable args shown below)
-# Defaults: approval_threshold=10_000_000, time_window_days=7, similarity_threshold=0.5
-# (If you want to change these, edit the call in __main__ or wrap with your own runner.)
-python src/06_analyze_contract_splitting.py --country MX
-
-# Export consolidated Excel report
-python src/99_export_risk_report.py
 
 
 ## 🗺️ Roadmap
