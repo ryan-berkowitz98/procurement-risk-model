@@ -1,5 +1,4 @@
 # Global Procurement Risk Model  
-# By: ryan-berkowitz98
 
 ## 📖 Project Overview
 
@@ -358,13 +357,13 @@ Most scripts accept `--country XX`; otherwise they default to `DEFAULT_COUNTRY`.
 
 ## 📄 License & Attribution
 
-- Please attribute **Global Procurement Risk Model** and the author when sharing derivatives.
+- Please attribute **Global Procurement Risk Model** and ryan-berkowitz98 when sharing derivatives.
 
 
 ## 📬 Contact
 
 Questions or want a run for another country?  
-**Ryan Berkowitz** — open an issue in this repo or reach out directly.
+- Open an issue in this repo or reach out directly.
 
 
 
