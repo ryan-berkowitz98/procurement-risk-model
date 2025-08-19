@@ -19,9 +19,6 @@ The Procurement Risk Model provides a set of tools for analyzing public procurem
 - **Aggregate Bidder Risk Scoring**  
   Generates a composite score for each bidder based on multiple red-flag indicators, making it easy to identify the riskiest entities.
 
-- **Buyer & Market Summaries**  
-  Produces summary reports of contracting authorities, spending patterns, and concentration of awards.
-
 - **Red-Flag Modules**  
   The model evaluates several common risk signals in procurement data:
   - **Non-competitive tenders** – flags contracts awarded without open competition.  
@@ -85,7 +82,7 @@ This project is designed to support both **non-technical** and **technical** aud
     python src/03_flag_non_competitive.py
     ...
     python src/99_export_risk_report.py
-  - Final outputs (including Excel summaries and flagged risk tables) will be written to the '/output' directory.
+  - Final outputs (including Excel summaries and more detailed flagged risk parquet files) will be written to the '/output' directory.
   
 
 ## 📊 Outputs
@@ -139,6 +136,50 @@ Running the pipeline generates a Excel risk report in the `output/` directory. M
   - Common addresses, phone numbers, or email domains
   - Reused tax IDs/registration numbers (where available)
   - Identical websites or branding across “new” companies
+ 
+
+## 🧭 Red-Flag Definitions & Methodology
+
+This project computes several directional indicators (“flags”). Flags are **clues, not proof**—use them to prioritize human review.
+
+### How scoring works (high level)
+
+- Each module emits a flag and a **module risk score** that is a **percentile rank scaled 0–100** (100 = highest risk relative to peers in the dataset).
+- The **aggregate bidder risk score** is the **evenly weighted average across all modules** (e.g., Non-Competitive, Spending Concentration, Short Bid Windows, Contract Splitting).  
+  **If a module is missing for a bidder, that module’s score is treated as 0.**
+  - Example: `aggregate = (NC + CONC + SHORT + SPLIT) / 4`
+- Higher scores = higher review priority. 
+
+### 🔴 Non-Competitive Tenders
+
+**What it flags:** contracts awarded with little or no real competition (e.g., direct awards or single-bidder tenders). Repeated success in these deals can be a warning sign.
+
+**Why it matters:** when open competition is skipped, the risk of favoritism, waste, or corruption goes up. This module helps spot suppliers who rely heavily on such awards.
+
+**What the module does:**
+1. Looks at every supplier’s awards, then picks out the ones marked *non-competitive* (flagged earlier in the cleaning module).
+2. Totals **how many** non-competitive awards a supplier won and **how much money** those awards are worth.
+3. Finds the supplier’s **top government buyer** for these non-competitive awards (who pays them the most in this category).
+4. Calculates **shares**, like:  
+   - What **percent of the supplier’s wins** were non-competitive?  
+   - What **percent of their total payments** came from non-competitive awards?
+5. Ignores trivial cases using **minimum thresholds** (set in `config.py`) so tiny, one-off awards don’t create noise.
+6. Ranks suppliers with a simple **risk score** that goes up when they both (a) win **many** non-competitive awards and (b) are **highly dependent** on them.
+
+**How to use it:**
+- Start with suppliers at the **top of the list** (higher score = look here first).
+- Prioritize names that show **both** a high number of non-competitive wins **and** a high **percentage** of their business coming from them.
+- Note repeated pairings with the **same buyer**—that can indicate a relationship worth reviewing.
+
+**Outputs you get:**
+- **Summary file** — one row per supplier with counts, dollars, shares, top buyer, and a **risk score**  
+  *(used by the overall risk scoring to prioritize review).*
+- **Detail file** — every **non-competitive contract** for drill-down (who bought what, when, and for how much).
+
+> **Tuning:** You can raise or lower the minimum dollar amounts and one-tender floor in `config.py` to match your risk tolerance (e.g., ignore very small awards or require at least one sizable non-competitive contract).
+
+
+
 
 
 
