@@ -150,6 +150,8 @@ This project computes several directional indicators (“flags”). Flags are **
   - Example: `aggregate = (NC + CONC + SHORT + SPLIT) / 4`
 - Higher scores = higher review priority. 
 
+---
+
 ### 🔴 Non-Competitive Tenders
 
 **What it flags (plain English):** contracts awarded with little or no real competition (e.g., direct awards or single-bidder tenders). Repeated success in these deals can be a warning sign.
@@ -195,10 +197,11 @@ For each supplier:
 - Percentages guard against divide-by-zero and ignore infinities; missing denominators become 0.
 - A single large direct award can elevate a supplier—use the **detail file** to validate context.
 
+---
 
-### 🟠 Spending Concentration (Buyer → Supplier)
+### 🔴 Spending Concentration (Buyer → Supplier)
 
-**What it flags (plain English):** cases where a **single government buyer** gives a **large share** of its open-tender awards (by **$, count**, or both) to the **same supplier** within a year. Even in “open” competitions, this pattern can hint at favoritism or weak competition.
+**What it flags:** cases where a **single government buyer** gives a **large share** of its open-tender awards (by **$, count**, or both) to the **same supplier** within a year. Even in “open” competitions, this pattern can hint at favoritism or weak competition.
 
 **Why it matters:** if one supplier consistently captures a big slice of a buyer’s awards, it can signal reduced competition, steering, or cozy relationships—worth a closer look.
 
@@ -239,6 +242,55 @@ For each supplier:
 - Current thresholds: **10%** share (payments **or** tenders) **and** **$1,000,000** annual paid to the supplier; buyer-years with only **1 award** are excluded.
 - Thresholds are set **in the script**; adjust to fit your risk tolerance (e.g., raise the dollar floor).
 - A high share at a **small buyer** can still appear—verify materiality using the dollars columns.
+
+---
+
+### 🔴 Short Bidding Windows
+
+**What it flags:** tenders where the time to submit bids is unusually short. Very tight windows can tilt the playing field toward a pre-selected supplier.
+
+**Why it matters:** when suppliers don’t have enough time to prepare bids, genuine competition drops. Repeated wins under short windows can indicate steering or process manipulation.
+
+#### What the module does
+1. **Focuses on open tenders only** (non-competitive awards are excluded here).
+2. **Builds the bidding window (in days):** from first publication date → bid deadline.  
+   - If the deadline is missing, it **fills** it using the earliest downstream milestone (award/contract dates) so we can still measure time.
+3. **Keeps sensible windows & material tenders:**  
+   - Only positive windows, capped at **≤ 365 days**.  
+   - Filters to tenders **≥ $1,000,000** to focus on meaningful awards.
+4. **Finds a dynamic threshold:** the **10th percentile** of observed bidding windows in the dataset (not hard-coded).
+5. **Flags short-window tenders:** anything **below** that threshold.
+6. **Summarizes by supplier:** counts, average and minimum window length, average payment, total dollars at risk, and the **top buyer** for that supplier.
+7. **Visualizes the distribution:** saves a histogram with the **threshold, mean, and median** marked.
+
+#### Risk scoring (0–100)
+For each supplier:
+- Convert the **count of short-window wins** to a percentile rank (0–1).
+- Convert the **average window length** to a percentile rank and **invert** it (shorter → higher risk).
+- **Score = count_percentile × (1 − avg_days_percentile) × 100.**
+
+> Scores are percentile-based (0–100). **100 = highest relative risk** in this dataset.
+
+#### How to use it
+- Sort the **summary** by `short_bid_window_risk_score` (highest first).
+- Prioritize suppliers with **many** short-window wins and **very short** average windows.
+- Check the **top buyer** column for repeat buyer–supplier patterns.
+- Cross-reference with **Non-Competitive** and **Spending Concentration** flags for stronger signals.
+
+#### Outputs
+- **Detail file (Parquet):** `output/ancillary/{COUNTRY}_short_bid_window_all.parquet`  
+  Every flagged tender with dates, window length, buyer/supplier, and value.
+- **Supplier summary (Parquet):** `output/ancillary/{COUNTRY}_short_bid_window_summary.parquet`  
+  One row per supplier with counts, averages, dollars at risk, top buyer, and **risk score**.
+- **Visualization (PNG):** `output/ancillary/{COUNTRY}_short_bid_window_histogram.png`  
+  Distribution of bidding windows with the dynamic threshold, mean, and median.
+
+#### Thresholds & caveats
+- Dynamic threshold = **10th percentile** of observed windows (dataset-specific).  
+- Materiality filter: only tenders **≥ $1,000,000** included in this module.  
+- Date quality matters: if publication/award/contract dates are missing or noisy, results can be conservative.  
+- A few short-window wins at a small buyer may still appear—use dollars at risk to gauge impact.
+
 
 
 
