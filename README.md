@@ -36,55 +36,7 @@ The Procurement Risk Model provides a set of tools for analyzing public procurem
   Clear output tables and summaries make the results accessible for both technical users (who can extend the code) and non-technical users (who can use the outputs to guide investigations).
 
 
-## ⚙️ Installation & Setup
-
-This project is designed to support both **non-technical** and **technical** audiences. Choose the path that fits your role and needs:
-
-### 🧑‍💼 For Non-Technical Users
-
-- You can start exploring the results immediately by downloading the **`MX_procurement_risk_report.xlsx`** file from the `output/` folder in this repository.  
-  This file contains a risk report already generated for **Mexico’s procurement data**.  
-- The meaning of each red flag indicator will be covered in depth later in this README.  
-- If you’d like to see results for a **different country**, you have two options:  
-  1. **Contact me directly** and I can run the model for you.  
-  2. Work with a **data scientist or technical colleague** who can run the model internally using the instructions below.
-
-
-### 👩‍💻 For Technical Users
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/ryan-berkowitz98/procurement-risk-model.git
-   cd procurement-risk-model
-
-2. **Set up a Python environment**  
-   - Python 3.9+ is recommended.  
-   - Install dependencies:  
   
-     ```bash
-     pip install -r requirements.txt
-     ```
-
-3. **Prepare the input data**
-    - **Choose a country.** See the list of supported countries in the [data brief (p.4)](https://www.govtransparency.eu/wp-content/uploads/2024/04/Fazekas-et-al_Global-PP-data_published_2024.pdf).
-    - **Download the country-level CSV.** Use the [Global Contract-Level Public Procurement Dataset](https://www.govtransparency.eu/global-contract-level-public-procurement-dataset/) (maintained by the **Government Transparency Institute**) or go directly to the [dataset download index](https://input.mendeley.com/inputsets/fwzpywbhgw/3).
-    - **Place the file in `input/`.** Name it using the convention:
-    
-       `{country_code}_DIB_[YYYY].csv`  
-       Example: `MX_DIB_2023.csv`
-
-4. **Run the pipeline**
-  - Each script in the `src/` directory is modular and can be executed from the command line or within a Python environment.
-  - A typical run might look like:
-    ```bash
-    python src/01_input.py
-    python src/02_clean_transform.py
-    python src/03_flag_non_competitive.py
-    ...
-    python src/99_export_risk_report.py
-  - Final outputs (including Excel summaries and more detailed flagged risk parquet files) will be written to the '/output' directory.
-  
-
 ## 📊 Outputs
 
 Running the pipeline generates a Excel risk report in the `output/` directory. Most users will start with the Excel report:
@@ -135,8 +87,8 @@ Running the pipeline generates a Excel risk report in the `output/` directory. M
   - Shared directors/officers or overlapping shareholders
   - Common addresses, phone numbers, or email domains
   - Reused tax IDs/registration numbers (where available)
-  - Identical websites or branding across “new” companies
- 
+  - Identical websites or branding across “new” companies 
+
 
 ## 🧭 Red-Flag Definitions & Methodology
 
@@ -337,6 +289,56 @@ For each supplier:
 - **Title similarity** uses a simple string matcher; it can miss synonyms or flag near-matches—manual review recommended.
 - Clustering is **O(n²) per supplier**; for very large datasets, consider blocking (by CPV/category, buyer, or month) or approximate similarity.
 - Imputed dates (when award date is missing) can make clusters conservative; always validate in source documents.
+
+
+
+## ⚙️ Installation & Setup
+
+This project is designed to support both **non-technical** and **technical** audiences. Choose the path that fits your role and needs:
+
+### 🧑‍💼 For Non-Technical Users
+
+- You can start exploring the results immediately by downloading the **`MX_procurement_risk_report.xlsx`** file from the `output/` folder in this repository.  
+  This file contains a risk report already generated for **Mexico’s procurement data**.  
+- The meaning of each red flag indicator will be covered in depth later in this README.  
+- If you’d like to see results for a **different country**, you have two options:  
+  1. **Contact me directly** and I can run the model for you.  
+  2. Work with a **data scientist or technical colleague** who can run the model internally using the instructions below.
+
+
+### 👩‍💻 For Technical Users
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/ryan-berkowitz98/procurement-risk-model.git
+   cd procurement-risk-model
+
+2. **Set up a Python environment**  
+   - Python 3.9+ is recommended.  
+   - Install dependencies:  
+  
+     ```bash
+     pip install -r requirements.txt
+     ```
+
+3. **Prepare the input data**
+    - **Choose a country.** See the list of supported countries in the [data brief (p.4)](https://www.govtransparency.eu/wp-content/uploads/2024/04/Fazekas-et-al_Global-PP-data_published_2024.pdf).
+    - **Download the country-level CSV.** Use the [Global Contract-Level Public Procurement Dataset](https://www.govtransparency.eu/global-contract-level-public-procurement-dataset/) (maintained by the **Government Transparency Institute**) or go directly to the [dataset download index](https://input.mendeley.com/inputsets/fwzpywbhgw/3).
+    - **Place the file in `input/`.** Name it using the convention:
+    
+       `{country_code}_DIB_[YYYY].csv`  
+       Example: `MX_DIB_2023.csv`
+
+4. **Run the pipeline**
+  - Each script in the `src/` directory is modular and can be executed from the command line or within a Python environment.
+  - A typical run might look like:
+    ```bash
+    python src/01_input.py
+    python src/02_clean_transform.py
+    python src/03_flag_non_competitive.py
+    ...
+    python src/99_export_risk_report.py
+  - Final outputs (including Excel summaries and more detailed flagged risk parquet files) will be written to the '/output' directory.
 
 
 
