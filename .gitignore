@@ -3,3 +3,6 @@ input/MX_DIB_2023.csv
 __pycache__/
 *.py[cod]
 *.pyo
+__pycache__/
+*.py[cod]
+*.pyo
