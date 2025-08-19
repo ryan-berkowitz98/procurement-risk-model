@@ -291,6 +291,53 @@ For each supplier:
 - Date quality matters: if publication/award/contract dates are missing or noisy, results can be conservative.  
 - A few short-window wins at a small buyer may still appear—use dollars at risk to gauge impact.
 
+---
+
+### 🔴 Contract Splitting
+
+**What it flags:** patterns where several **similar, sub-threshold contracts** are awarded to the **same supplier** within a **short time window**. This can suggest a larger buy was split to avoid oversight thresholds.
+
+**Why it matters:** splitting can bypass approvals, reduce transparency, and steer awards. Clusters of small, look-alike contracts in a few days are a classic warning sign.
+
+#### What the module does
+1. **Preps the data:** parses key dates, normalizes titles (lowercase, remove punctuation), and ensures values are numeric.
+2. **Sets scope:** focuses on suppliers whose **total payments** exceed an **approval threshold** (default **$10,000,000**).
+3. **Looks for sub-threshold awards:** keeps each supplier’s **individual tenders below** that threshold.
+4. **Builds similarity clusters per supplier:**  
+   - Connects tenders that are **close in time** (default **≤ 7 days**) **and** have **similar titles** (SequenceMatcher ratio **≥ 0.5**).  
+   - Uses graph **connected components** to form candidate clusters, then re-splits any that exceed the time window.
+5. **Keeps meaningful clusters:** at least **2 contracts** and **≥ $1,000,000** total value.
+6. **Summarizes per supplier:** number of clusters, average/max contracts per cluster, dollars at risk, and a percentile-based **risk score**.
+
+#### Risk scoring (0–100)
+For each supplier:
+- Convert **cluster count** to a percentile rank (0–1).
+- Convert **average contracts per cluster** to a percentile rank (0–1).
+- **Score = count_percentile × avg_size_percentile × 100.**
+
+> Scores are percentile-based (0–100). **100 = highest relative risk** in this dataset.
+
+#### How to use it
+- Sort the **summary** by `contract_splitting_risk_score` (highest first).
+- In the **detail** file, inspect clusters with:
+  - **Many contracts** in **few days**,
+  - **Very similar titles**, and
+  - **Single or small set of buyers** (check `buyer_count` / `buyers` list).
+- Cross-reference with **Short Bidding Windows** and **Spending Concentration** to strengthen the hypothesis.
+
+#### Outputs (Parquet)
+- **Cluster details:** `output/ancillary/{COUNTRY}_contract_split_all.parquet`  
+  One row per detected cluster with: `cluster_id`, date span, number of contracts, total/avg value, buyers, titles, and tender IDs.
+- **Supplier summary:** `output/ancillary/{COUNTRY}_contract_split_summary.parquet`  
+  One row per supplier with cluster counts, sizes, dollars at risk, and **risk score**.
+
+#### Thresholds & caveats
+- Defaults: `approval_threshold = $10,000,000`, `time_window_days = 7`, `similarity_threshold = 0.5`, and **min cluster total** = **$1,000,000**.  
+  *(These are function arguments and can be tuned.)*
+- **Title similarity** uses a simple string matcher; it can miss synonyms or flag near-matches—manual review recommended.
+- Clustering is **O(n²) per supplier**; for very large datasets, consider blocking (by CPV/category, buyer, or month) or approximate similarity.
+- Imputed dates (when award date is missing) can make clusters conservative; always validate in source documents.
+
 
 
 
