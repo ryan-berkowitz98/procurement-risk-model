@@ -152,31 +152,95 @@ This project computes several directional indicators (“flags”). Flags are **
 
 ### 🔴 Non-Competitive Tenders
 
-**What it flags:** contracts awarded with little or no real competition (e.g., direct awards or single-bidder tenders). Repeated success in these deals can be a warning sign.
+**What it flags (plain English):** contracts awarded with little or no real competition (e.g., direct awards or single-bidder tenders). Repeated success in these deals can be a warning sign.
 
-**Why it matters:** when open competition is skipped, the risk of favoritism, waste, or corruption goes up. This module helps spot suppliers who rely heavily on such awards.
+**Why it matters:** when open competition is skipped, the risk of favoritism, waste, or corruption goes up. This module helps you spot suppliers who rely heavily on such awards.
 
-**What the module does:**
-1. Looks at every supplier’s awards, then picks out the ones marked *non-competitive* (flagged earlier in the cleaning module).
-2. Totals **how many** non-competitive awards a supplier won and **how much money** those awards are worth.
-3. Finds the supplier’s **top government buyer** for these non-competitive awards (who pays them the most in this category).
-4. Calculates **shares**, like:  
+#### What the module does
+1. **Finds non-competitive awards** (pre-tagged earlier in the pipeline).
+2. **Totals, per supplier:** how many non-competitive awards they won and how much those are worth.
+3. **Calculates shares:**  
    - What **percent of the supplier’s wins** were non-competitive?  
    - What **percent of their total payments** came from non-competitive awards?
-5. Ignores trivial cases using **minimum thresholds** (set in `config.py`) so tiny, one-off awards don’t create noise.
-6. Ranks suppliers with a simple **risk score** that goes up when they both (a) win **many** non-competitive awards and (b) are **highly dependent** on them.
+4. **Identifies the top buyer** paying that supplier for non-competitive awards.
+5. **Applies minimum thresholds** to ignore trivial cases (see below).
+6. **Ranks suppliers** with a simple risk score: more non-competitive wins **and** higher dependence on them → higher score.
 
-**How to use it:**
-- Start with suppliers at the **top of the list** (higher score = look here first).
-- Prioritize names that show **both** a high number of non-competitive wins **and** a high **percentage** of their business coming from them.
-- Note repeated pairings with the **same buyer**—that can indicate a relationship worth reviewing.
+#### Risk scoring (0–100)
+For each supplier:
+- Compute a **percentile rank** of their `non_competitive_tenders_won` among all suppliers (0–1).
+- Multiply by their **percent** of wins that are non-competitive.  
+- **Score = percentile × share × 100.**
 
-**Outputs you get:**
-- **Summary file** — one row per supplier with counts, dollars, shares, top buyer, and a **risk score**  
-  *(used by the overall risk scoring to prioritize review).*
-- **Detail file** — every **non-competitive contract** for drill-down (who bought what, when, and for how much).
+> Scores are percentile-based (0–100). **100 = highest relative risk** in this dataset.
 
-> **Tuning:** You can raise or lower the minimum dollar amounts and one-tender floor in `config.py` to match your risk tolerance (e.g., ignore very small awards or require at least one sizable non-competitive contract).
+#### How to use it
+- Sort the **summary** by `non_competitive_tenders_risk_score` (highest first).
+- Prioritize suppliers with **many** non-competitive wins **and** a **high percentage** of their business from them.
+- Look at the **top buyer** column—repeat pairings with the same buyer merit attention.
+- Cross-reference with **Spending Concentration**, **Short Bid Windows**, and **Contract Splitting** for stronger signals.
+
+#### Outputs (Parquet)
+- **Detail file:** `output/ancillary/{COUNTRY}_non_competitive_tenders_all.parquet`  
+  Every non-competitive contract for drill-down (who bought what, when, how much).
+- **Supplier summary:** `output/ancillary/{COUNTRY}_non_competitive_tenders_summary.parquet`  
+  One row per supplier with counts, dollars, shares, top buyer, and **risk score** (feeds the overall aggregate score).
+
+#### Thresholds & caveats
+- Flags only suppliers with:  
+  - **≥ 1** non-competitive award, **and**  
+  - **non-competitive dollars** ≥ `NON_COMP_DOLLAR_THRESHOLD`, **and**  
+  - **at least one** non-competitive award ≥ `NON_COMP_MAX_TENDER_THRESHOLD`.  
+  *(Tune these in `config.py` to match your risk tolerance.)*
+- Percentages guard against divide-by-zero and ignore infinities; missing denominators become 0.
+- A single large direct award can elevate a supplier—use the **detail file** to validate context.
+
+
+### 🟠 Spending Concentration (Buyer → Supplier)
+
+**What it flags (plain English):** cases where a **single government buyer** gives a **large share** of its open-tender awards (by **$, count**, or both) to the **same supplier** within a year. Even in “open” competitions, this pattern can hint at favoritism or weak competition.
+
+**Why it matters:** if one supplier consistently captures a big slice of a buyer’s awards, it can signal reduced competition, steering, or cozy relationships—worth a closer look.
+
+#### What the module does
+1. **Focus on open tenders only** (non-competitive awards are excluded here).
+2. For each **buyer × year**, compute totals:
+   - awards **count** and **payments ($)**.
+3. For each **buyer × supplier × year**, compute that supplier’s share of the buyer’s year:
+   - `% of tenders` and `% of payments`.
+4. **Basic quality gate:** ignore buyer-years with only **1 award** (avoids trivial 100% shares).
+5. **Flag high-concentration cases** when, in a given buyer-year, a supplier has:
+   - **> 10%** of the buyer’s **payments** **OR** **> 10%** of the buyer’s **tender count**, **AND**
+   - at least **$1,000,000** paid to that supplier in that year.
+6. For context, identify each supplier’s **top buyer** (the buyer who paid them the most across all years).
+
+#### Risk scoring (0–100)
+For each supplier:
+- Sum their flagged **% of tenders** and **% of payments** across all flagged buyer-years.
+- Convert each sum to a **percentile rank** among suppliers (0–1).
+- **Score = (tenders percentile) × (payments percentile) × 100.**
+  - Suppliers who are **high on both dimensions** rise to the top.
+
+> Scores are percentile-based (0–100). **100 = highest relative risk** in this dataset.
+
+#### How to use it
+- Open the **summary** and sort by `spending_concentration_risk_score` (highest first).
+- Prioritize suppliers with **many flagged years** *and* **large dollars at risk**.
+- Check the **top buyer** column—repeat pairings with the same buyer merit attention.
+- Cross-reference with the **Non-Competitive** and **Short Bid Window** flags for stronger signals.
+
+#### Outputs (Parquet)
+- **Detailed cases:** `output/ancillary/{COUNTRY}_spending_concentration_all.parquet`  
+  One row per **buyer → supplier → year** that met the thresholds (with shares and dollars).
+- **Supplier summary:** `output/ancillary/{COUNTRY}_spending_concentration_summary.parquet`  
+  One row per **supplier** with: total dollars at risk, count of flagged cases, top buyer, and **risk score**.
+
+#### Thresholds & caveats
+- Current thresholds: **10%** share (payments **or** tenders) **and** **$1,000,000** annual paid to the supplier; buyer-years with only **1 award** are excluded.
+- Thresholds are set **in the script**; adjust to fit your risk tolerance (e.g., raise the dollar floor).
+- A high share at a **small buyer** can still appear—verify materiality using the dollars columns.
+
+
 
 
 
