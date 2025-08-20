@@ -12,7 +12,7 @@ This project is intended to serve two audiences:
 
 Ultimately, this repository documents what can be built with Python while also serving as a foundation for further projects in proactive risk monitoring and fraud detection.
 
-## ✨ Features & Capabilities
+## Features & Capabilities
 
 The Procurement Risk Model provides a set of tools for analyzing public procurement data and flagging potential indicators of fraud or corruption risk. Current features include:
 
