@@ -21,7 +21,7 @@ The Procurement Risk Model provides a set of tools for analyzing public procurem
 
 - **Red-Flag Modules**  
   The model evaluates several common risk signals in procurement data:
-  - **Non-competitive tenders** – flags contracts awarded without open competition.  
+  - **Non-competitive tenders** – flags suppliers that frequently win contracts awarded without open competition.  
   - **Spending concentration** – highlights when a single supplier consistently wins a large share of awards from a single buyer.  
   - **Short bid windows** – identifies contracts where the time to submit bids was unusually short.  
   - **Contract splitting** – detects when larger procurements may have been divided into smaller lots to bypass thresholds or oversight.  
@@ -79,7 +79,7 @@ Running the pipeline generates a Excel risk report in the `output/` directory. M
 - **Risk score = heat level.** A higher score simply means “look here first.” It’s a triage signal, not a final judgment.
 - **Flags = clues, not proof.** Each flag points to a pattern (e.g., no competition, short bid window). Use them to form a hypothesis, then verify in the source docs.
 - **Quick workflow:**
-  1. Open **Bidder Risk Summary** and sort by `risk_score` (highest first).
+  1. Open **Bidder Risk Summary** and sort by `Total Risk Score` (highest first).
   2. Filter for `Number of Risk Flags ≥ 2` to find stronger signals.
   3. Cross-check the same bidders/buyers across other tabs (Non-Comp, Concentration, Short Windows, Splitting). Names that repeat move up the priority list.
   4. Focus first on records with **larger spend** or **more awards** (higher potential impact).
@@ -92,12 +92,12 @@ Running the pipeline generates a Excel risk report in the `output/` directory. M
 
 ## 🧭 Red-Flag Definitions & Methodology
 
-This project computes several directional indicators (“flags”). Flags are **clues, not proof**—use them to prioritize human review.
+This project computes several directional indicators (“flags”). Flags are **clues, not proof**. Use them to prioritize human review.
 
 ### How scoring works (high level)
 
 - Each module emits a flag and a **module risk score** that is a **percentile rank scaled 0–100** (100 = highest risk relative to peers in the dataset).
-- The **aggregate bidder risk score** is the **evenly weighted average across all modules** (e.g., Non-Competitive, Spending Concentration, Short Bid Windows, Contract Splitting).  
+- The **aggregate bidder risk score** is the **evenly weighted average across all modules** (Non-Competitive, Spending Concentration, Short Bid Windows, Contract Splitting).  
   **If a module is missing for a bidder, that module’s score is treated as 0.**
   - Example: `aggregate = (NC + CONC + SHORT + SPLIT) / 4`
 - Higher scores = higher review priority. 
@@ -106,9 +106,9 @@ This project computes several directional indicators (“flags”). Flags are **
 
 ### 🔴 Non-Competitive Tenders
 
-**What it flags (plain English):** contracts awarded with little or no real competition (e.g., direct awards or single-bidder tenders). Repeated success in these deals can be a warning sign.
+**What it flags:** contracts awarded with little or no real competition (e.g., direct awards or single-bidder tenders). Repeated success in these deals can be a warning sign.
 
-**Why it matters:** when open competition is skipped, the risk of favoritism, waste, or corruption goes up. This module helps you spot suppliers who rely heavily on such awards.
+**Why it matters:** when open competition is skipped, the risk of favoritism, waste, or corruption goes up. This module helps spot suppliers who rely heavily on such awards.
 
 #### What the module does
 1. **Finds non-competitive awards** (pre-tagged earlier in the pipeline).
@@ -175,7 +175,7 @@ For each supplier:
 - Convert each sum to a **percentile rank** among suppliers (0–1).
 - **Score = (tenders percentile) × (payments percentile) × 100.**
   - Suppliers who are **high on both dimensions** rise to the top.
-
+ 
 > Scores are percentile-based (0–100). **100 = highest relative risk** in this dataset.
 
 #### How to use it
